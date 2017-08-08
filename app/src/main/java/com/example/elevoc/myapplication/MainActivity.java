@@ -12,6 +12,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private int[] array={9,8,7,6,5,4,3,2,1,0};
+    private int[][] array2={{1,2,3,4},{4,5,6,7},{7,8,9,10}};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,13 +26,14 @@ public class MainActivity extends AppCompatActivity {
 //        int a[]=add(array);
 //        if(a==null)
 //            throw new RuntimeException("a=null");
-////        for(int i=0;i<a.length;i++)
-//            for(int j=0;j<a.length;j++)
-//                tv.setText(tv.getText()+String.valueOf(a[j])+" ");
+        transmit2DArray(array2);
+        for(int i=0;i<array2.length;i++)
+            for(int j=0;j<array2[i].length;j++)
+                tv.setText(tv.getText()+String.valueOf(array2[i][j])+" ");
 
-        transmit1DArray(array);
-        for(int i=0;i<array.length;i++)
-            tv.setText(tv.getText()+String.valueOf(array[i])+" ");
+//        transmit1DArray(array);
+//        for(int i=0;i<array.length;i++)
+//            tv.setText(tv.getText()+String.valueOf(array[i])+" ");
 
 //        tv.setText(connectString("hello ","world!"," I am tom"));
     }
@@ -47,8 +49,12 @@ public class MainActivity extends AppCompatActivity {
     public native String reverseString(String s);//反转字符串
     public native void sort(int a[]);
     public native int[] add(int a[]);//申请一片内存存放相加后的数据
-    public native int[][] getTwoArray(int size);//返回而且数组
-    public native int[] getOneArray(int len);//返回以为数组
+
+    //jni->java
+    public native int[][] getTwoArray(int size);//返回二维数组
+    public native int[] getOneArray(int len);//返回一维数组
+
+    //java->jni
     public native void transmit1DArray(int a[]);//传递一维数组
     public native void transmit2DArray(int a[][]);
 }

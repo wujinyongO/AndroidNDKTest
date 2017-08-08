@@ -12,6 +12,19 @@ Java_com_example_elevoc_myapplication_MainActivity_transmit2DArray(JNIEnv *env, 
                                                                    jobjectArray a) {
 
     // TODO
+    int row=env->GetArrayLength(a);
+    jarray myarray= (jarray) env->GetObjectArrayElement(a, 0);
+    int col=env->GetArrayLength(myarray);
+
+    for(int i=0;i<row;i++){
+        myarray= (jarray) env->GetObjectArrayElement(a, i);
+        jint *data=env->GetIntArrayElements((jintArray) myarray, 0);
+
+        for(int j=0;j<col;j++){
+            data[j]+=10;
+        }
+        env->ReleaseIntArrayElements((jintArray) myarray, data, 0);
+    }
 
 }
 
@@ -54,16 +67,16 @@ Java_com_example_elevoc_myapplication_MainActivity_getTwoArray(JNIEnv *env, jobj
 
     // TODO
     jobjectArray result;
-    jclass intArrCls = env->FindClass("[I");
-    result = env->NewObjectArray(size, intArrCls, NULL);
+    jclass intArrCls = env->FindClass("[I");//获得一个int型数组的引用
+    result = env->NewObjectArray(size, intArrCls, NULL);//创建一个数组对象
     for (int i = 0; i < size; i++) {
         jint tmp[256]; /* make sure it is large enough! */
-        jintArray iarr = env->NewIntArray(size);
+        jintArray iarr = env->NewIntArray(size);//创建一个一维数组
         for(int j = 0; j < size; j++) {
             tmp[j] = i + j;
         }
-        env->SetIntArrayRegion(iarr, 0, size, tmp);
-        env->SetObjectArrayElement(result, i, iarr);
+        env->SetIntArrayRegion(iarr, 0, size, tmp);//对一维数组进行赋值
+        env->SetObjectArrayElement(result, i, iarr);//将一维数组添加到上述一维数组的指针中
         env->DeleteLocalRef(iarr);
     }
     return result;
