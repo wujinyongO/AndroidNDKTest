@@ -8,6 +8,76 @@
 
 extern "C"
 JNIEXPORT void JNICALL
+Java_com_example_elevoc_myapplication_MainActivity_callSuperInstanceMethod(JNIEnv *env,
+                                                                           jobject instance) {
+
+    // TODO
+    jclass cls_cat;
+    jclass cls_animal;
+    jmethodID mid_cat_init;
+    jmethodID mid_run;
+    jmethodID mid_getName;
+    jstring c_str_name;
+    jobject obj_cat;
+    const char *name=NULL;
+
+    //获取Cat类的class引用
+    cls_cat=env->FindClass("com/example/elevoc/myapplication/Cat");
+    if(cls_cat==NULL){
+        return;
+    }
+
+    //获取Cat的构造方法
+    mid_cat_init=env->GetMethodID(cls_cat,"<init>","(Ljava/lang/String;)V");
+    if(mid_cat_init==NULL){
+        return;
+    }
+    //创建一个String对象作为构造方法的参数
+    c_str_name=env->NewStringUTF("TomCat");
+    if(c_str_name==NULL){
+        return;
+    }
+    //创建一个Cat的对象实例
+    obj_cat=env->NewObject(cls_cat,mid_cat_init,c_str_name);
+    if(obj_cat==NULL){
+        return;
+    }
+
+    //-------------------调用父类Animal的run和getName方法-----------------------
+    //获取Animal的引用
+    cls_animal=env->FindClass("com/example/elevoc/myapplication/Animal");
+    if(cls_animal==NULL){
+        return;
+    }
+    //获取Animal的run方法
+    mid_run=env->GetMethodID(cls_animal,"run","()V");
+    if(mid_run==NULL){
+        return;
+    }
+    //调用Animal的run方法
+    env->CallNonvirtualVoidMethod(obj_cat,cls_animal,mid_run);
+
+    //获取Animal的getName方法
+    mid_getName=env->GetMethodID(cls_animal,"getName","()Ljava/lang/String;");
+    if(mid_getName==NULL){
+        return;
+    }
+    //调用Animal的getName
+    c_str_name= (jstring) env->CallNonvirtualObjectMethod(obj_cat, cls_animal, mid_getName);
+
+    name=env->GetStringUTFChars(c_str_name,NULL);
+    printf("C: Animal Name is %s\n",name);
+    env->ReleaseStringUTFChars(c_str_name,name);
+    //删除局部引用
+    env->DeleteLocalRef(cls_cat);
+    env->DeleteLocalRef(cls_animal);
+    env->DeleteLocalRef(c_str_name);
+    env->DeleteLocalRef(obj_cat);
+
+}
+
+extern "C"
+JNIEXPORT void JNICALL
 Java_com_example_elevoc_myapplication_MainActivity_accessStaticField(JNIEnv *env, jclass type) {
 
     // TODO

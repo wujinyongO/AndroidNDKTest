@@ -46,6 +46,8 @@ public class MainActivity extends AppCompatActivity {
         accessStaticField();
 
         tv.setText(""+t.getA2()+" "+ClassMethod.getA1());
+
+        callSuperInstanceMethod();
     }
 
     /**
@@ -77,4 +79,5 @@ public class MainActivity extends AppCompatActivity {
     public native static void accessInstanceField(ClassMethod obj);//
     public native static void accessStaticField();//
 
+    public native void callSuperInstanceMethod();
 }
