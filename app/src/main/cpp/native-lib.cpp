@@ -8,6 +8,155 @@
 
 extern "C"
 JNIEXPORT void JNICALL
+Java_com_example_elevoc_myapplication_MainActivity_accessStaticField(JNIEnv *env, jclass type) {
+
+    // TODO
+    jclass cls=NULL;
+    jfieldID fieldId=NULL;
+    jint num;
+    jint new_num;
+
+    //获取类的引用
+    cls=env->FindClass("com/example/elevoc/myapplication/ClassMethod");
+    if(cls==NULL){
+        return;
+    }
+
+    //找到对应的变量
+    fieldId=env->GetStaticFieldID(cls,"a1","I");
+    if(fieldId==NULL){
+        return;
+    }
+
+    //取出对应的变量
+    num=env->GetStaticIntField(cls,fieldId);
+
+    new_num=222;
+
+    //给对应的变量赋值
+    env->SetStaticIntField(cls,fieldId,new_num);
+
+    //删除局部引用
+    env->DeleteLocalRef(cls);
+
+}
+
+extern "C"
+JNIEXPORT void JNICALL
+Java_com_example_elevoc_myapplication_MainActivity_accessInstanceField(JNIEnv *env, jclass type,
+                                                                       jobject obj) {
+
+    // TODO
+    jclass cls=NULL;
+    jfieldID fieldId=NULL;
+    jint j_int;
+    jint j_newInt;
+    const char *c_str=NULL;
+
+    //获取类的引用
+    cls=env->GetObjectClass(obj);
+    if(cls==NULL){
+        return;
+    }
+
+    //找到对应变量的ID
+    fieldId=env->GetFieldID(cls,"a2","I");
+    if(fieldId==NULL){
+        return;
+    }
+
+    //获取变量的值
+    j_int= (jint) env->GetIntField(obj, fieldId);
+
+    j_newInt=111;
+
+    //给变量赋值
+    env->SetIntField(obj,fieldId,j_newInt);
+    //删除局部引用
+    env->DeleteLocalRef(cls);
+
+}
+
+extern "C"
+JNIEXPORT void JNICALL
+Java_com_example_elevoc_myapplication_MainActivity_callJavaInstanceMethod(JNIEnv *env,
+                                                                          jclass type) {
+
+    // TODO
+    jclass clas=NULL;
+    jobject jobj=NULL;
+    jmethodID  mid_construct=NULL;
+    jmethodID mid_instance=NULL;
+    jstring str=NULL;
+
+    //获取类的引用
+    clas=env->FindClass("com/example/elevoc/myapplication/ClassMethod");
+    if(clas==NULL){
+        return;
+    }
+
+    //找到类的构造函数，用于创建实例对象
+    mid_construct=env->GetMethodID(clas,"<init>","()V");
+    if(mid_construct==NULL){
+        return;
+    }
+
+    //找到需要调用的函数
+    mid_instance=env->GetMethodID(clas,"callInstanceMethod","(Ljava/lang/String;I)V");
+    if(mid_instance==NULL){
+        return;
+    }
+
+    //创建类的实例
+    jobj=env->NewObject(clas,mid_construct);
+    if(jobj==NULL){
+        return;
+    }
+
+    //调用函数
+    str=env->NewStringUTF("实例方法");
+    env->CallVoidMethod(jobj,mid_instance,str,321);
+
+    //删除局部引用
+    env->DeleteLocalRef(clas);
+    env->DeleteLocalRef(jobj);
+    env->DeleteLocalRef(str);
+
+}
+
+extern "C"
+JNIEXPORT void JNICALL
+Java_com_example_elevoc_myapplication_MainActivity_callJavaStaticMethod(JNIEnv *env, jclass type) {
+
+    // TODO
+    jclass clas=NULL;//类
+    jstring str=NULL;
+    jmethodID mid_static_method;//方法
+
+    //获取类的引用
+    clas=env->FindClass("com/example/elevoc/myapplication/ClassMethod");
+    if(clas==NULL){
+        return;
+    }
+
+    //找到类里面的静态方法
+    mid_static_method=env->GetStaticMethodID(clas,"callStaticMethod","(Ljava/lang/String;I)V");
+    if(mid_static_method==NULL){
+        return;
+    }
+
+    //调用类的静态方法
+    str=env->NewStringUTF("静态方法");
+    env->CallStaticVoidMethod(clas,mid_static_method,str,123);
+
+    //删除局部引用
+    env->DeleteLocalRef(clas);
+    env->DeleteLocalRef(str);
+
+}
+
+extern "C"
+JNIEXPORT void JNICALL
 Java_com_example_elevoc_myapplication_MainActivity_transmit2DArray(JNIEnv *env, jobject instance,
                                                                    jobjectArray a) {
 

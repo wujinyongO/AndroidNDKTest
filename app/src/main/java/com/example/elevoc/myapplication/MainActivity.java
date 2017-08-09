@@ -36,6 +36,16 @@ public class MainActivity extends AppCompatActivity {
 //            tv.setText(tv.getText()+String.valueOf(array[i])+" ");
 
 //        tv.setText(connectString("hello ","world!"," I am tom"));
+
+        callJavaStaticMethod();
+        callJavaInstanceMethod();
+
+        ClassMethod t=new ClassMethod();
+        t.setA2(1);
+        accessInstanceField(t);
+        accessStaticField();
+
+        tv.setText(""+t.getA2()+" "+ClassMethod.getA1());
     }
 
     /**
@@ -45,9 +55,8 @@ public class MainActivity extends AppCompatActivity {
     public native String stringFromJNI();
     public native int test(int a,int b);
     public native boolean outputAllData(boolean b,byte by,char c,short s,int i,long l,float f,double d);
-    public native String connectString(String... a);//将字符串数组连接成一个字符串
     public native String reverseString(String s);//反转字符串
-    public native void sort(int a[]);
+    public native void sort(int a[]);//排序
     public native int[] add(int a[]);//申请一片内存存放相加后的数据
 
     //jni->java
@@ -56,5 +65,16 @@ public class MainActivity extends AppCompatActivity {
 
     //java->jni
     public native void transmit1DArray(int a[]);//传递一维数组
-    public native void transmit2DArray(int a[][]);
+    public native void transmit2DArray(int a[][]);//传递二维数组
+
+    public native String connectString(String... a);//将字符串数组连接成一个字符串,在JNI申请字符串数组内存
+
+    //c c++调用java函数
+    public static native void callJavaStaticMethod();//调用java的静态函数
+    public static native void callJavaInstanceMethod();//调用java的实例函数
+
+    //c c++调用实例变量和静态变量
+    public native static void accessInstanceField(ClassMethod obj);//
+    public native static void accessStaticField();//
+
 }
