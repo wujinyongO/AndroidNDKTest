@@ -6,6 +6,8 @@ import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
+    TextView mTestPeople;
+
     // Used to load the 'native-lib' library on application startup.
     static {
         System.loadLibrary("native-lib");
@@ -18,6 +20,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        findView();
 
         // Example of a call to a native method
         TextView tv = (TextView) findViewById(R.id.sample_text);
@@ -48,6 +52,15 @@ public class MainActivity extends AppCompatActivity {
         tv.setText(""+t.getA2()+" "+ClassMethod.getA1());
 
         callSuperInstanceMethod();
+
+        // ------------------
+        // test People class, people.cpp
+        mTestPeople.setText(testPeopleString());
+        // ------------------
+    }
+
+    private void findView() {
+        mTestPeople = (TextView) findViewById(R.id.test_people_class);
     }
 
     /**
@@ -80,4 +93,9 @@ public class MainActivity extends AppCompatActivity {
     public native static void accessStaticField();//
 
     public native void callSuperInstanceMethod();
+
+    // ------------------
+    // test People class, people.cpp
+    private native String testPeopleString();
+    // ------------------
 }

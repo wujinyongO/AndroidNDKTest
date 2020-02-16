@@ -2,6 +2,8 @@
 #include <string>
 #include<algorithm>
 
+#include "people/people.h"
+
 #define LOG_TAG "System.out"
 #define LOGD(...) __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, __VA_ARGS__)
 #define LOGI(...) __android_log_print(ANDROID_LOG_INFO, LOG_TAG, __VA_ARGS__)
@@ -402,4 +404,11 @@ Java_com_example_elevoc_myapplication_MainActivity_stringFromJNI(
         jobject /* this */) {
     std::string hello = "Hello from C++";
     return env->NewStringUTF(hello.c_str());
+}
+extern "C"
+JNIEXPORT jstring JNICALL
+Java_com_example_elevoc_myapplication_MainActivity_testPeopleString(JNIEnv *env, jobject thiz) {
+    // TODO: implement testPeopleString()
+    People people;
+    return env->NewStringUTF(people.getPeopleName().c_str());
 }
